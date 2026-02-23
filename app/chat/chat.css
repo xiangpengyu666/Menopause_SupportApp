@@ -1,0 +1,11 @@
+.chatGrid{
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 12px;
+}
+
+@media (max-width: 900px){
+  .chatGrid{
+    grid-template-columns: 1fr;
+  }
+}
