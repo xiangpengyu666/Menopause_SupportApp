@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Together — Topics System</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5EDE0;
+    --cream-light: #FAF5EC;
+    --warm-peach: #F2C4A0;
+    --warm-orange: #E8945A;
+    --warm-amber: #D4853E;
+    --warm-gold: #C8973F;
+    --sage: #B8C5A2;
+    --sage-light: #D4DFC8;
+    --sage-dark: #8FA07A;
+    --blush: #E8B4A0;
+    --terracotta: #C47F5A;
+    --lavender: #C9B8D9;
+    --lavender-light: #E8E0F0;
+    --sky: #A8C4D8;
+    --sky-light: #D0E4F0;
+    --text-dark: #3A3028;
+    --text-mid: #7A6B58;
+    --text-light: #A89880;
+    --white: #FFFFFF;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #E8DFD0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px 60px;
+    gap: 32px;
+  }
+
+  /* === SECTION LABELS === */
+  .section-label {
+    text-align: center;
+    margin-bottom: 8px;
+  }
+  .section-label h2 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 20px;
+    color: var(--text-dark);
+    margin-bottom: 2px;
+  }
+  .section-label p {
+    font-size: 11px;
+    color: var(--text-light);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  /* ============================================
+     PHONE FRAME
+     ============================================ */
+  .phone {
+    width: 390px;
+    height: 844px;
+    border-radius: 44px;
+    overflow: hidden;
+    position: relative;
+    background: var(--cream);
+    box-shadow:
+      0 0 0 6px #1a1a1a,
+      0 0 0 8px #333,
+      0 30px 80px rgba(0,0,0,0.18);
+  }
+
+  /* Status bar */
+  .status-bar {
+    height: 54px;
+    padding: 14px 24px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-dark);
+  }
+
+  .status-icons {
+    display: flex;
+    gap: 4px;
+    font-size: 12px;
+  }
+
+  /* Page header */
+  .page-header {
+    padding: 4px 24px 14px;
+  }
+
+  .page-header h1 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 28px;
+    color: var(--text-dark);
+    line-height: 1.1;
+  }
+
+  .page-header .subtitle {
+    font-size: 13px;
+    color: var(--text-mid);
+    margin-top: 4px;
+  }
+
+  /* Scrollable content */
+  .page-scroll {
+    height: calc(844px - 54px - 60px - 70px);
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .page-scroll::-webkit-scrollbar { display: none; }
+
+  /* ============================================
+     SECTION 1: MONTHLY TOPIC — Hero card
+     ============================================ */
+  .monthly-hero {
+    margin: 0 20px 20px;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+
+  .monthly-hero:hover { transform: scale(0.985); }
+
+  .monthly-art {
+    height: 200px;
+    position: relative;
+    background: linear-gradient(155deg, #F0D8B8 0%, #EDCFA8 30%, #E8C090 55%, #E0B888 80%, #D8C0A0 100%);
+    overflow: hidden;
+  }
+
+  /* Texture overlay */
+  .monthly-art::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 3;
+  }
+
+  /* Geometric illustration */
+  .m-circle {
+    position: absolute;
+    border-radius: 50%;
+  }
+
+  .m-c1 {
+    width: 120px; height: 120px;
+    top: 20px; right: 24px;
+    background: radial-gradient(circle at 38% 32%, #F5D898 0%, var(--warm-orange) 55%, var(--warm-amber) 100%);
+    opacity: 0.8;
+  }
+  .m-c1::after {
+    content: ''; position: absolute; inset: 0; border-radius: 50%;
+    background: radial-gradient(circle at 32% 28%, rgba(255,255,255,0.3) 0%, transparent 50%);
+  }
+
+  .m-c2 {
+    width: 70px; height: 70px;
+    top: 100px; right: 120px;
+    background: radial-gradient(circle at 38% 32%, #F5DDB8 0%, var(--warm-peach) 65%);
+    opacity: 0.65;
+  }
+
+  .m-c3 {
+    width: 40px; height: 40px;
+    top: 50px; right: 155px;
+    background: radial-gradient(circle at 38% 32%, #D8E0C8 0%, var(--sage) 70%);
+    opacity: 0.55;
+  }
+
+  /* Small decorative elements */
+  .m-dot {
+    position: absolute;
+    border-radius: 50%;
+    background: var(--sage);
+  }
+  .m-d1 { width: 8px; height: 8px; top: 30px; left: 30px; opacity: 0.4; }
+  .m-d2 { width: 12px; height: 12px; top: 70px; left: 60px; opacity: 0.3; background: var(--warm-peach); }
+  .m-d3 { width: 6px; height: 6px; top: 140px; left: 40px; opacity: 0.35; background: var(--warm-gold); }
+  .m-d4 { width: 10px; height: 10px; top: 160px; left: 100px; opacity: 0.25; }
+
+  .m-leaf {
+    position: absolute;
+    width: 28px; height: 38px;
+    border-radius: 50% 50% 50% 0;
+    background: var(--sage);
+    opacity: 0.35;
+  }
+  .m-l1 { top: 25px; left: 50px; transform: rotate(-25deg); }
+  .m-l2 { top: 120px; left: 20px; transform: rotate(15deg); width: 22px; height: 30px; opacity: 0.25; }
+
+  .m-star {
+    position: absolute;
+    color: var(--warm-gold);
+    opacity: 0.45;
+  }
+  .m-s1 { top: 18px; left: 120px; font-size: 14px; }
+  .m-s2 { top: 80px; left: 170px; font-size: 10px; opacity: 0.35; }
+
+  /* Constellation lines */
+  .m-lines {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+  .m-lines line {
+    stroke: var(--warm-gold);
+    stroke-width: 0.7;
+    stroke-dasharray: 3 5;
+    opacity: 0.25;
+  }
+
+  /* Month badge */
+  .month-badge {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    background: rgba(255,255,255,0.55);
+    backdrop-filter: blur(8px);
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--warm-amber);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    z-index: 5;
+  }
+
+  .monthly-content {
+    padding: 16px 18px 18px;
+    background: var(--white);
+  }
+
+  .monthly-eyebrow {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-bottom: 4px;
+  }
+
+  .monthly-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 22px;
+    color: var(--text-dark);
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+
+  .monthly-desc {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-mid);
+    margin-bottom: 14px;
+  }
+
+  .monthly-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .monthly-participants {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .avatar-stack {
+    display: flex;
+  }
+
+  .avatar-stack .mini-av {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid white;
+    margin-left: -8px;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .avatar-stack .mini-av:first-child { margin-left: 0; }
+  .mini-av.av-a { background: linear-gradient(135deg, #F5DDB0, var(--warm-peach)); }
+  .mini-av.av-b { background: linear-gradient(135deg, var(--sage-light), var(--sage)); }
+  .mini-av.av-c { background: linear-gradient(135deg, #F0D0C0, var(--blush)); }
+  .mini-av.av-d { background: linear-gradient(135deg, var(--lavender-light), var(--lavender)); }
+
+  .participant-count {
+    font-size: 12px;
+    color: var(--text-mid);
+  }
+
+  .monthly-progress {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .week-dots {
+    display: flex;
+    gap: 4px;
+  }
+
+  .week-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--warm-peach);
+    opacity: 0.3;
+  }
+
+  .week-dot.active {
+    background: var(--warm-orange);
+    opacity: 1;
+    box-shadow: 0 0 6px rgba(232,148,90,0.4);
+  }
+
+  .week-dot.done {
+    background: var(--sage);
+    opacity: 0.7;
+  }
+
+  .week-label {
+    font-size: 10px;
+    color: var(--text-light);
+  }
+
+  /* Weekly sub-topic inside monthly */
+  .weekly-strip {
+    margin: 0 20px 16px;
+    background: var(--white);
+    border-radius: 14px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+
+  .weekly-strip:hover { transform: scale(0.985); }
+
+  .weekly-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .wi-active {
+    background: linear-gradient(135deg, #FFF0E0, var(--warm-peach));
+  }
+
+  .weekly-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .weekly-info .wi-label {
+    font-size: 10px;
+    color: var(--warm-orange);
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .weekly-info .wi-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 16px;
+    color: var(--text-dark);
+    line-height: 1.2;
+    margin-top: 1px;
+  }
+
+  .weekly-info .wi-desc {
+    font-size: 11.5px;
+    color: var(--text-mid);
+    margin-top: 2px;
+    line-height: 1.4;
+  }
+
+  .weekly-arrow {
+    color: var(--text-light);
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  /* Quick actions row */
+  .quick-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .qa-btn {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    border: 1px solid rgba(0,0,0,0.06);
+    background: var(--cream-light);
+    color: var(--text-mid);
+    cursor: pointer;
+  }
+
+  .qa-btn.primary {
+    background: var(--warm-orange);
+    color: white;
+    border-color: transparent;
+  }
+
+  /* ============================================
+     SECTION 2: ALWAYS-ON CHANNELS
+     ============================================ */
+  .section-divider {
+    padding: 20px 24px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .section-divider h3 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 18px;
+    color: var(--text-dark);
+  }
+
+  .section-divider .see-all {
+    font-size: 12px;
+    color: var(--warm-orange);
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  .channels-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 0 20px 16px;
+  }
+
+  .channel-card {
+    background: var(--white);
+    border-radius: 14px;
+    padding: 14px;
+    cursor: pointer;
+    transition: transform 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .channel-card:hover { transform: scale(0.97); }
+
+  /* Subtle background accent per channel */
+  .channel-card::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    opacity: 0.15;
+  }
+
+  .ch-insomnia::before { background: var(--warm-orange); }
+  .ch-hotflash::before { background: #E86A5A; }
+  .ch-anxiety::before { background: var(--lavender); }
+  .ch-body::before { background: var(--sage); }
+
+  .channel-emoji {
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+
+  .channel-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 2px;
+  }
+
+  .channel-count {
+    font-size: 11px;
+    color: var(--text-light);
+    margin-bottom: 8px;
+  }
+
+  .channel-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    color: var(--warm-orange);
+    font-weight: 500;
+  }
+
+  .live-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--warm-orange);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+
+  /* Star brightness indicator */
+  .channel-star {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #F5D090 20%, var(--warm-orange) 70%);
+    box-shadow: 0 0 8px rgba(232,148,90,0.4);
+    animation: pulse 3s ease-in-out infinite;
+  }
+
+  .channel-star.dim {
+    width: 7px;
+    height: 7px;
+    opacity: 0.4;
+    box-shadow: none;
+    animation: none;
+  }
+
+  /* ============================================
+     SECTION 3: AI NUDGE
+     ============================================ */
+  .ai-nudge {
+    margin: 4px 20px 16px;
+    background: linear-gradient(135deg, #FFF8F0 0%, #FFF0E8 100%);
+    border-radius: 16px;
+    padding: 16px;
+    border: 1px solid rgba(232,148,90,0.15);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ai-nudge::before {
+    content: '';
+    position: absolute;
+    top: -30px;
+    right: -30px;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--warm-peach);
+    opacity: 0.12;
+  }
+
+  .nudge-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .nudge-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--warm-orange), var(--warm-amber));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: white;
+  }
+
+  .nudge-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--warm-amber);
+    letter-spacing: 0.5px;
+  }
+
+  .nudge-sublabel {
+    font-size: 10px;
+    color: var(--text-light);
+  }
+
+  .nudge-text {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--text-dark);
+    margin-bottom: 12px;
+    font-style: italic;
+  }
+
+  .nudge-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .nudge-btn {
+    padding: 7px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .nudge-btn.primary {
+    background: var(--warm-orange);
+    color: white;
+  }
+
+  .nudge-btn.secondary {
+    background: rgba(0,0,0,0.04);
+    color: var(--text-mid);
+    border: 1px solid rgba(0,0,0,0.06);
+  }
+
+  /* ============================================
+     SECTION 4: PAST CONSTELLATIONS
+     ============================================ */
+  .past-topics {
+    padding: 0 20px 20px;
+  }
+
+  .past-scroll {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .past-scroll::-webkit-scrollbar { display: none; }
+
+  .past-card {
+    min-width: 140px;
+    background: var(--white);
+    border-radius: 14px;
+    padding: 14px;
+    cursor: pointer;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+
+  .past-card:hover { transform: scale(0.97); }
+
+  .past-month {
+    font-size: 10px;
+    color: var(--text-light);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .past-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 14px;
+    color: var(--text-dark);
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+
+  .past-stats {
+    font-size: 10.5px;
+    color: var(--text-light);
+  }
+
+  .past-stars {
+    display: flex;
+    gap: 3px;
+    margin-top: 8px;
+  }
+
+  .past-star {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--warm-gold);
+    opacity: 0.35;
+  }
+
+  .past-star.lit { opacity: 0.8; box-shadow: 0 0 4px rgba(200,151,63,0.3); }
+
+  /* ============================================
+     BOTTOM NAV
+     ============================================ */
+  .bnav {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 70px;
+    background: white;
+    border-top: 1px solid rgba(0,0,0,0.05);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding-bottom: 8px;
+  }
+
+  .bnav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .bnav-item .bi { font-size: 20px; opacity: 0.35; }
+  .bnav-item.active .bi { opacity: 1; }
+  .bnav-item .bl { font-size: 10px; color: var(--text-light); }
+  .bnav-item.active .bl { color: var(--warm-orange); font-weight: 600; }
+
+  /* ============================================
+     ANIMATIONS
+     ============================================ */
+  .fade-in {
+    animation: fadeIn 0.5s ease-out both;
+  }
+
+  .fade-in:nth-child(1) { animation-delay: 0.05s; }
+  .fade-in:nth-child(2) { animation-delay: 0.1s; }
+  .fade-in:nth-child(3) { animation-delay: 0.15s; }
+  .fade-in:nth-child(4) { animation-delay: 0.2s; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* === TOP LEVEL LAYOUT === */
+  .phones-row {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .phone-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .phone-group .label {
+    font-family: 'Instrument Serif', serif;
+    font-size: 14px;
+    color: var(--text-mid);
+    margin-top: 12px;
+    text-align: center;
+  }
+
+  .phone-group .sublabel {
+    font-size: 10px;
+    color: var(--text-light);
+    text-align: center;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+  }
+
+  /* Page title */
+  .page-title {
+    text-align: center;
+  }
+  .page-title h1 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 24px;
+    color: var(--text-dark);
+    letter-spacing: 1px;
+  }
+  .page-title p {
+    font-size: 11px;
+    color: var(--text-light);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  /* Tab switcher inside phone */
+  .tab-switch {
+    display: flex;
+    gap: 2px;
+    padding: 0 20px 12px;
+  }
+
+  .tab-item {
+    flex: 1;
+    text-align: center;
+    padding: 8px 0;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-light);
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .tab-item.active {
+    color: var(--warm-orange);
+    border-bottom-color: var(--warm-orange);
+  }
+</style>
+</head>
+<body>
+
+<div class="page-title">
+  <h1>Together — Topics System</h1>
+  <p>Three-layer architecture</p>
+</div>
+
+<div class="phones-row">
+
+  <!-- ==========================================
+       PHONE 1: MAIN TOPICS PAGE
+       ========================================== -->
+  <div class="phone-group">
+    <div class="phone">
+      <div class="status-bar">
+        <span>9:41</span>
+        <div class="status-icons">📶 🔋</div>
+      </div>
+
+      <div class="page-header">
+        <h1>Together</h1>
+        <div class="subtitle">Your community, your stories</div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tab-switch">
+        <div class="tab-item active">Topics</div>
+        <div class="tab-item">Stories</div>
+        <div class="tab-item">Star Map</div>
+      </div>
+
+      <div class="page-scroll">
+
+        <!-- === MONTHLY TOPIC HERO === -->
+        <div class="monthly-hero fade-in">
+          <div class="monthly-art">
+            <div class="month-badge">MARCH 2026</div>
+            <div class="m-circle m-c1"></div>
+            <div class="m-circle m-c2"></div>
+            <div class="m-circle m-c3"></div>
+            <div class="m-dot m-d1"></div>
+            <div class="m-dot m-d2"></div>
+            <div class="m-dot m-d3"></div>
+            <div class="m-dot m-d4"></div>
+            <div class="m-leaf m-l1"></div>
+            <div class="m-leaf m-l2"></div>
+            <div class="m-star m-s1">✦</div>
+            <div class="m-star m-s2">✦</div>
+            <svg class="m-lines" viewBox="0 0 350 200">
+              <line x1="80" y1="55" x2="140" y2="115" />
+              <line x1="140" y1="115" x2="230" y2="85" />
+            </svg>
+          </div>
+          <div class="monthly-content">
+            <div class="monthly-eyebrow">THIS MONTH'S JOURNEY</div>
+            <div class="monthly-title">"The Talk"</div>
+            <div class="monthly-desc">How do you explain what you're going through to the people who matter most? Let's explore together.</div>
+            <div class="monthly-meta">
+              <div class="monthly-participants">
+                <div class="avatar-stack">
+                  <div class="mini-av av-a">🍊</div>
+                  <div class="mini-av av-b">🌿</div>
+                  <div class="mini-av av-c">🍑</div>
+                  <div class="mini-av av-d">🌙</div>
+                </div>
+                <span class="participant-count">389 sharing</span>
+              </div>
+              <div class="monthly-progress">
+                <div class="week-dots">
+                  <div class="week-dot done"></div>
+                  <div class="week-dot active"></div>
+                  <div class="week-dot"></div>
+                  <div class="week-dot"></div>
+                </div>
+                <span class="week-label">Wk 2 / 4</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- === THIS WEEK'S SUB-TOPIC === -->
+        <div class="weekly-strip fade-in">
+          <div class="weekly-icon wi-active">💬</div>
+          <div class="weekly-info">
+            <div class="wi-label">THIS WEEK</div>
+            <div class="wi-title">"Words I Wish I Had"</div>
+            <div class="wi-desc">What do you say when they ask "are you okay?"</div>
+            <div class="quick-actions">
+              <div class="qa-btn primary">Share my story</div>
+              <div class="qa-btn">Quick poll</div>
+              <div class="qa-btn">Fill-in ✏️</div>
+            </div>
+          </div>
+          <div class="weekly-arrow">›</div>
+        </div>
+
+        <!-- === AI NUDGE === -->
+        <div class="ai-nudge fade-in">
+          <div class="nudge-header">
+            <div class="nudge-avatar">✦</div>
+            <div>
+              <div class="nudge-label">For You</div>
+              <div class="nudge-sublabel">Based on your recent conversation</div>
+            </div>
+          </div>
+          <div class="nudge-text">"You mentioned struggling to explain your mood swings to your daughter. 12 other women shared similar stories this week — would you like to see them?"</div>
+          <div class="nudge-actions">
+            <button class="nudge-btn primary">Show me</button>
+            <button class="nudge-btn secondary">Share my story</button>
+            <button class="nudge-btn secondary">Not now</button>
+          </div>
+        </div>
+
+        <!-- === ALWAYS-ON CHANNELS === -->
+        <div class="section-divider">
+          <h3>Always Open</h3>
+          <span class="see-all">See all ›</span>
+        </div>
+
+        <div class="channels-grid">
+          <div class="channel-card ch-insomnia fade-in">
+            <div class="channel-star"></div>
+            <div class="channel-emoji">🌙</div>
+            <div class="channel-name">Sleepless Nights</div>
+            <div class="channel-count">2.4k stories</div>
+            <div class="channel-live">
+              <div class="live-dot"></div>
+              38 sharing now
+            </div>
+          </div>
+
+          <div class="channel-card ch-hotflash fade-in">
+            <div class="channel-star"></div>
+            <div class="channel-emoji">🔥</div>
+            <div class="channel-name">Hot Flash Diaries</div>
+            <div class="channel-count">1.9k stories</div>
+            <div class="channel-live">
+              <div class="live-dot"></div>
+              24 sharing now
+            </div>
+          </div>
+
+          <div class="channel-card ch-anxiety fade-in">
+            <div class="channel-star dim"></div>
+            <div class="channel-emoji">🫧</div>
+            <div class="channel-name">Anxiety & Mood</div>
+            <div class="channel-count">1.6k stories</div>
+            <div class="channel-live">
+              <div class="live-dot"></div>
+              17 sharing now
+            </div>
+          </div>
+
+          <div class="channel-card ch-body fade-in">
+            <div class="channel-star dim"></div>
+            <div class="channel-emoji">🪞</div>
+            <div class="channel-name">Body Changes</div>
+            <div class="channel-count">980 stories</div>
+            <div class="channel-live">
+              <div class="live-dot"></div>
+              9 sharing now
+            </div>
+          </div>
+        </div>
+
+        <!-- === PAST CONSTELLATIONS === -->
+        <div class="section-divider">
+          <h3>Past Journeys</h3>
+          <span class="see-all">Archive ›</span>
+        </div>
+
+        <div class="past-topics">
+          <div class="past-scroll">
+            <div class="past-card">
+              <div class="past-month">FEB 2026</div>
+              <div class="past-title">New Beginnings</div>
+              <div class="past-stats">412 stories · 3.2k reactions</div>
+              <div class="past-stars">
+                <div class="past-star lit"></div>
+                <div class="past-star lit"></div>
+                <div class="past-star lit"></div>
+                <div class="past-star"></div>
+                <div class="past-star"></div>
+              </div>
+            </div>
+
+            <div class="past-card">
+              <div class="past-month">JAN 2026</div>
+              <div class="past-title">Letters to Myself</div>
+              <div class="past-stats">567 stories · 4.8k reactions</div>
+              <div class="past-stars">
+                <div class="past-star lit"></div>
+                <div class="past-star lit"></div>
+                <div class="past-star lit"></div>
+                <div class="past-star lit"></div>
+                <div class="past-star"></div>
+              </div>
+            </div>
+
+            <div class="past-card">
+              <div class="past-month">DEC 2025</div>
+              <div class="past-title">Holiday Survival</div>
+              <div class="past-stats">321 stories · 2.7k reactions</div>
+              <div class="past-stars">
+                <div class="past-star lit"></div>
+                <div class="past-star lit"></div>
+                <div class="past-star"></div>
+                <div class="past-star"></div>
+                <div class="past-star"></div>
+              </div>
+            </div>
+
+            <div class="past-card">
+              <div class="past-month">NOV 2025</div>
+              <div class="past-title">Mother, Myself</div>
+              <div class="past-stats">489 stories · 4.1k reactions</div>
+              <div class="past-stars">
+                <div class="past-star lit"></div>
+                <div class="past-star lit"></div>
+                <div class="past-star lit"></div>
+                <div class="past-star lit"></div>
+                <div class="past-star"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- end page-scroll -->
+
+      <!-- Bottom Nav -->
+      <div class="bnav">
+        <div class="bnav-item"><span class="bi">💬</span><span class="bl">Home</span></div>
+        <div class="bnav-item"><span class="bi">📊</span><span class="bl">Summary</span></div>
+        <div class="bnav-item active"><span class="bi">✦</span><span class="bl">Together</span></div>
+        <div class="bnav-item"><span class="bi">📖</span><span class="bl">Resources</span></div>
+        <div class="bnav-item"><span class="bi">⚙️</span><span class="bl">Settings</span></div>
+      </div>
+    </div>
+
+    <div class="label">Main Topics Page</div>
+    <div class="sublabel">All three layers in one view</div>
+  </div>
+
+
+  <!-- ==========================================
+       PHONE 2: WEEKLY TOPIC DETAIL
+       ========================================== -->
+  <div class="phone-group">
+    <div class="phone">
+      <div class="status-bar">
+        <span>9:41</span>
+        <div class="status-icons">📶 🔋</div>
+      </div>
+
+      <!-- Back nav -->
+      <div style="padding: 0 20px 8px; display: flex; align-items: center; gap: 6px; cursor: pointer;">
+        <span style="color: var(--warm-orange); font-size: 18px;">‹</span>
+        <span style="color: var(--warm-orange); font-size: 13px;">The Talk</span>
+      </div>
+
+      <div class="page-header" style="padding-top: 0;">
+        <div style="font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-light); margin-bottom: 2px;">WEEK 2 OF 4</div>
+        <h1 style="font-size: 24px;">"Words I Wish I Had"</h1>
+        <div class="subtitle">What do you say when they ask "are you okay?"</div>
+      </div>
+
+      <div class="page-scroll">
+
+        <!-- Poll -->
+        <div style="margin: 8px 20px 16px; background: white; border-radius: 16px; padding: 16px;">
+          <div style="font-size: 12px; font-weight: 600; color: var(--text-dark); margin-bottom: 12px;">Quick Poll · 283 voted</div>
+          <div style="font-size: 13px; color: var(--text-mid); margin-bottom: 14px;">When someone asks "are you okay?", you usually…</div>
+
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="position: relative; background: var(--cream-light); border-radius: 10px; padding: 10px 14px; overflow: hidden;">
+              <div style="position: absolute; top: 0; left: 0; height: 100%; width: 42%; background: var(--warm-peach); opacity: 0.3; border-radius: 10px;"></div>
+              <div style="position: relative; display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 12.5px; color: var(--text-dark);">😊 Say "I'm fine" and change the subject</span>
+                <span style="font-size: 11px; font-weight: 600; color: var(--warm-amber);">42%</span>
+              </div>
+            </div>
+
+            <div style="position: relative; background: var(--cream-light); border-radius: 10px; padding: 10px 14px; overflow: hidden;">
+              <div style="position: absolute; top: 0; left: 0; height: 100%; width: 28%; background: var(--warm-peach); opacity: 0.3; border-radius: 10px;"></div>
+              <div style="position: relative; display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 12.5px; color: var(--text-dark);">😤 Want to explain but don't know how</span>
+                <span style="font-size: 11px; font-weight: 600; color: var(--warm-amber);">28%</span>
+              </div>
+            </div>
+
+            <div style="position: relative; background: var(--cream-light); border-radius: 10px; padding: 10px 14px; overflow: hidden;">
+              <div style="position: absolute; top: 0; left: 0; height: 100%; width: 19%; background: var(--warm-peach); opacity: 0.3; border-radius: 10px;"></div>
+              <div style="position: relative; display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 12.5px; color: var(--text-dark);">💪 Try to be honest about it</span>
+                <span style="font-size: 11px; font-weight: 600; color: var(--warm-amber);">19%</span>
+              </div>
+            </div>
+
+            <div style="position: relative; background: var(--cream-light); border-radius: 10px; padding: 10px 14px; overflow: hidden;">
+              <div style="position: absolute; top: 0; left: 0; height: 100%; width: 11%; background: var(--warm-peach); opacity: 0.3; border-radius: 10px;"></div>
+              <div style="position: relative; display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 12.5px; color: var(--text-dark);">😂 Make a joke to deflect</span>
+                <span style="font-size: 11px; font-weight: 600; color: var(--warm-amber);">11%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fill-in prompt -->
+        <div style="margin: 0 20px 16px; background: white; border-radius: 16px; padding: 16px;">
+          <div style="font-size: 12px; font-weight: 600; color: var(--text-dark); margin-bottom: 10px;">✏️ Fill in the blank · 94 responses</div>
+          <div style="font-size: 15px; color: var(--text-dark); line-height: 1.8;">
+            <span>When my </span>
+            <span style="color: var(--warm-orange); border-bottom: 1.5px dashed var(--warm-orange); padding-bottom: 1px;">____</span>
+            <span> asks if I'm okay, I wish I could say </span>
+            <span style="color: var(--warm-orange); border-bottom: 1.5px dashed var(--warm-orange); padding-bottom: 1px;">____</span>
+          </div>
+          <div style="margin-top: 14px; display: flex; gap: 6px;">
+            <div style="flex: 1; padding: 10px 14px; border-radius: 12px; background: var(--cream-light); font-size: 12px; color: var(--text-light);">Tap to write yours…</div>
+            <div style="padding: 10px 16px; border-radius: 12px; background: var(--warm-orange); color: white; font-size: 12px; font-weight: 500;">Share</div>
+          </div>
+
+          <!-- Sample responses -->
+          <div style="margin-top: 14px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="padding: 10px 14px; background: var(--cream-light); border-radius: 12px;">
+              <div style="font-size: 12px; color: var(--text-dark); line-height: 1.5;">When my <b style="color: var(--warm-orange);">daughter</b> asks if I'm okay, I wish I could say <b style="color: var(--warm-orange);">"my body is changing and sometimes it makes me cry, but it's not your fault"</b></div>
+              <div style="margin-top: 6px; font-size: 10.5px; color: var(--text-light); display: flex; gap: 10px;">
+                <span>🌊 Me too · 23</span>
+                <span>🫂 Hugs · 18</span>
+              </div>
+            </div>
+
+            <div style="padding: 10px 14px; background: var(--cream-light); border-radius: 12px;">
+              <div style="font-size: 12px; color: var(--text-dark); line-height: 1.5;">When my <b style="color: var(--warm-orange);">husband</b> asks if I'm okay, I wish I could say <b style="color: var(--warm-orange);">"no, and I need you to just sit with me without trying to fix it"</b></div>
+              <div style="margin-top: 6px; font-size: 10.5px; color: var(--text-light); display: flex; gap: 10px;">
+                <span>🌊 Me too · 47</span>
+                <span>🫂 Hugs · 31</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mid-week AI insight -->
+        <div style="margin: 0 20px 16px; background: linear-gradient(135deg, #FFF8F0, #FFF0E8); border-radius: 16px; padding: 16px; border: 1px solid rgba(232,148,90,0.12);">
+          <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+            <span style="font-size: 14px;">✦</span>
+            <span style="font-size: 11px; font-weight: 600; color: var(--warm-amber);">Mid-week Insight</span>
+            <span style="font-size: 10px; color: var(--text-light);">· Wednesday</span>
+          </div>
+          <div style="font-size: 13px; line-height: 1.65; color: var(--text-dark);">
+            So far, 42% of you say "I'm fine" when asked if you're okay. The most mentioned people you wish you could talk to: <b>daughters</b> (34%), <b>partners</b> (28%), and <b>coworkers</b> (18%). You're not alone in feeling lost for words.
+          </div>
+        </div>
+
+        <!-- Stories section header -->
+        <div class="section-divider" style="padding-top: 4px;">
+          <h3>Stories this week</h3>
+          <span class="see-all">48 stories ›</span>
+        </div>
+
+        <!-- Story preview card -->
+        <div style="margin: 0 20px 12px; background: white; border-radius: 14px; padding: 16px; box-shadow: 0 1px 6px rgba(0,0,0,0.04);">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+            <div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #F5DDB0, var(--warm-peach)); display: flex; align-items: center; justify-content: center; font-size: 14px;">🍊</div>
+            <div>
+              <div style="font-size: 12px; font-weight: 500; color: var(--text-dark);">Anonymous Sunset</div>
+              <div style="font-size: 10px; color: var(--text-light);">2h ago</div>
+            </div>
+            <div style="margin-left: auto; width: 12px; height: 12px; border-radius: 50%; background: radial-gradient(circle, #F5D090, var(--warm-orange)); box-shadow: 0 0 8px rgba(232,148,90,0.4);"></div>
+          </div>
+          <div style="font-size: 13px; line-height: 1.6; color: var(--text-dark);">My 14-year-old asked me why I've been "weird" lately. I sat her down and showed her a diagram of what perimenopause does. She said "so you're basically going through reverse puberty?" and somehow that made me feel so understood…</div>
+          <div style="margin-top: 10px; display: flex; gap: 6px;">
+            <span style="padding: 4px 10px; border-radius: 16px; font-size: 11px; background: var(--cream-light); border: 1px solid rgba(0,0,0,0.04);">🌊 Me too · 67</span>
+            <span style="padding: 4px 10px; border-radius: 16px; font-size: 11px; background: var(--cream-light); border: 1px solid rgba(0,0,0,0.04);">😂 Haha · 43</span>
+            <span style="padding: 4px 10px; border-radius: 16px; font-size: 11px; background: var(--cream-light); border: 1px solid rgba(0,0,0,0.04);">💪 Brave · 29</span>
+          </div>
+        </div>
+
+      </div><!-- end page-scroll -->
+
+      <div class="bnav">
+        <div class="bnav-item"><span class="bi">💬</span><span class="bl">Home</span></div>
+        <div class="bnav-item"><span class="bi">📊</span><span class="bl">Summary</span></div>
+        <div class="bnav-item active"><span class="bi">✦</span><span class="bl">Together</span></div>
+        <div class="bnav-item"><span class="bi">📖</span><span class="bl">Resources</span></div>
+        <div class="bnav-item"><span class="bi">⚙️</span><span class="bl">Settings</span></div>
+      </div>
+    </div>
+
+    <div class="label">Weekly Topic Detail</div>
+    <div class="sublabel">Poll + Fill-in + AI Insight + Stories</div>
+  </div>
+
+</div><!-- end phones-row -->
+
+</body>
+</html>
